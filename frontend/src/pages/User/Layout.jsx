@@ -1,8 +1,8 @@
+import UserHeader from '@/components/User-View/Header'
 import React from 'react'
-import UserHeader from './Header'
 import { Outlet } from 'react-router'
 
-const Layout = () => {
+const UserLayout = () => {
   return (
     <div>
       <UserHeader />
@@ -14,4 +14,4 @@ const Layout = () => {
   )
 }
 
-export default Layout
+export default UserLayout

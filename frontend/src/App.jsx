@@ -6,6 +6,9 @@ import AdminDashboard from "./pages/Admin-View/Dashboard";
 import TalentManagement from "./pages/Admin-View/Talent/Management";
 import AddTalent from "./pages/Admin-View/Talent/Add";
 import UserManagement from "./pages/Admin-View/User/Management";
+import TalentLayout from "./pages/Talent-View/Layout";
+import TalentDashboard from "./pages/Talent-View/Dashboard";
+import UserLayout from "./pages/User/Layout";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,7 +26,30 @@ function App() {
         {path:"user-management" , element:<UserManagement />},
         
       ]
-    }
+    },
+
+    {
+      path: "talent",
+      element:(
+        <TalentLayout />
+      ),
+      children: [
+        {path:"dashboard" , element:<TalentDashboard />},
+        
+      ]
+    },
+
+    {
+      path: "/",
+      element:(
+        <UserLayout />
+      ),
+      children: [
+        {path:"dashboard" , element:<TalentDashboard />},
+        
+      ]
+    },
+
   ])
 
   return (
