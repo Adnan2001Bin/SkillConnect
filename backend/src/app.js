@@ -26,7 +26,7 @@ app.use(
 
 app.use(express.json())
 app.use(cookieParser())
-app.options("*", cors());
+// app.options("*", cors());
 
 
 export default app;
