@@ -1,4 +1,5 @@
 import { useState } from "react";
+import './App.css'
 import { Button } from "./components/ui/button";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import AdminLayout from "./pages/Admin-View/Layout";
@@ -9,11 +10,23 @@ import UserManagement from "./pages/Admin-View/User/Management";
 import TalentLayout from "./pages/Talent-View/Layout";
 import TalentDashboard from "./pages/Talent-View/Dashboard";
 import UserLayout from "./pages/User/Layout";
+import AuthLayout from "./pages/Auth/Layout";
+import Register from "./pages/Auth/Register";
 
 function App() {
   const [count, setCount] = useState(0);
 
   const router = createBrowserRouter([
+
+    {
+      path:"auth",
+      element:(<AuthLayout />),
+
+      children:[
+        {path:"register" , element:<Register />},
+      ]
+    },
+
     {
       path: "admin",
       element:(
