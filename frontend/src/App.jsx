@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './App.css'
 import { Button } from "./components/ui/button";
 import { createBrowserRouter, RouterProvider } from "react-router";
@@ -17,9 +17,14 @@ import { useAuthStore } from "./store/authStore";
 
 function App() {
   const [count, setCount] = useState(0);
-    const {user } = useAuthStore();
+  const { user, isLoading, checkAuth } = useAuthStore();
 
-    console.log("user" ,user);
+  useEffect(() => {
+    // Check authentication status when the app loads
+    checkAuth();
+  }, [checkAuth]);
+
+  console.log("user:", user);
     
   
 

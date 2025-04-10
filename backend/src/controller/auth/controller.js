@@ -161,3 +161,43 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+export const isAuthenticated = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authenticated." });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_TOKEN_SECRET || "default_secret"
+    );
+
+    if (!decoded) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid token." });
+    }
+
+    // Fetch user details
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    res.json({ success: true, message: "User is authenticated.", user });
+  } catch (error) {
+    console.error("Error during authentication check:", error);
+    res.status(500).json({
+      success: false,
+      message:
+        error.message || "An error occurred during authentication check.",
+    });
+  }
+};

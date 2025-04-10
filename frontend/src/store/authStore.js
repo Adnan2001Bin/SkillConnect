@@ -67,5 +67,30 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  checkAuth: async () => {
+    set({ isLoading: true });
+    const baseUrl = import.meta.env.PROD
+      ? import.meta.env.VITE_API_BASE_URL_PROD
+      : import.meta.env.VITE_API_BASE_URL;
+
+    try {
+      const response = await axios.get(`${baseUrl}/api/auth/is-auth`, {
+        withCredentials: true,
+      });
+      set({
+        user: response.data.user,
+        token: response.data.token,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        user: null,
+        token: null,
+        isLoading: false,
+        error: error.response?.data?.message || "Not authenticated",
+      });
+    }
+  },
+
   clearError: () => set({ error: null }),
 }));
