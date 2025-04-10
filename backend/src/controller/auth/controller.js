@@ -4,8 +4,6 @@ import bcrypt from "bcryptjs";
 import ms from "ms";
 import transporter from "../../config/nodemailer.js";
 
-
-
 //Create JWT
 const createToken = (user) => {
   const { _id, role, email, name } = user;
@@ -67,12 +65,12 @@ export const registerUser = async (req, res) => {
       path: "/",
       maxAge: ms(process.env.ACCESS_TOKEN_EXPIRY || "1h"),
     });
-  // Send welcome email
-  await sendEmail({
-    from: process.env.SENDER_EMAIL,
-    to: email,
-    subject: "Welcome to SkillConnect!",
-    html: `
+    // Send welcome email
+    await sendEmail({
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to SkillConnect!",
+      html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #2c3e50;">Welcome to SkillConnect, ${name}!</h2>
         <p style="font-size: 16px; color: #34495e;">
@@ -90,7 +88,7 @@ export const registerUser = async (req, res) => {
         </p>
       </div>
     `,
-  });
+    });
 
     res.status(201).json({
       success: true,
@@ -102,6 +100,64 @@ export const registerUser = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "An error occurred while registering the user.",
+    });
+  }
+};
+
+// Login User
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    validateFields(["email", "password"], req.body);
+
+    // Check if user exists in the User collection
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found. Please register first.",
+      });
+    }
+
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password. Please try again.",
+      });
+    }
+
+    // Generate token
+    const token = createToken(user);
+
+    // Set cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+      maxAge: ms(process.env.ACCESS_TOKEN_EXPIRY || "1h"),
+    });
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        role: user.role, // Include the role in the response
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while logging in.",
     });
   }
 };

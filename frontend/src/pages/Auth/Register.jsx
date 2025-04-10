@@ -35,7 +35,7 @@ const Register = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/70"></div>
         <img
-          src="https://images.pexels.com/photos/1595391/pexels-photo-1595391.jpeg"
+          src="https://images.pexels.com/photos/3182759/pexels-photo-3182759.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           alt="Abstract dark workspace"
           className="w-full h-full object-cover opacity-50"
         />
