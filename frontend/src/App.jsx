@@ -12,9 +12,16 @@ import TalentDashboard from "./pages/Talent-View/Dashboard";
 import UserLayout from "./pages/User/Layout";
 import AuthLayout from "./pages/Auth/Layout";
 import Register from "./pages/Auth/Register";
+import Login from "./pages/Auth/Login";
+import { useAuthStore } from "./store/authStore";
 
 function App() {
   const [count, setCount] = useState(0);
+    const {user } = useAuthStore();
+
+    console.log("user" ,user);
+    
+  
 
   const router = createBrowserRouter([
 
@@ -24,6 +31,7 @@ function App() {
 
       children:[
         {path:"register" , element:<Register />},
+        {path:"login" , element:<Login />},
       ]
     },
 
