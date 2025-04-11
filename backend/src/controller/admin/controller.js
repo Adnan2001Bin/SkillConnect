@@ -1,5 +1,9 @@
 import { sendEmail, validateFields } from "../auth/controller.js";
 import { Readable } from "stream";
+import cloudinary from "../../config/cloudinary.js";
+import { User } from "../../models/auth/user.model.js";
+import bcrypt from "bcryptjs";
+
 
 export const addTalent = async (req, res) => {
   try {
@@ -114,6 +118,27 @@ export const addTalent = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "An error occurred while adding the talent",
+    });
+  }
+};
+
+
+
+export const getTalents = async (req, res) => {
+  try {
+    // Fetch all talents, no restriction on createdBy
+    const talents = await User.find({ role: "talent" }).select("-password"); // Exclude password
+
+    res.status(200).json({
+      success: true,
+      message: "Talents retrieved successfully",
+      talents,
+    });
+  } catch (error) {
+    console.error("Error fetching talents:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while fetching talents",
     });
   }
 };

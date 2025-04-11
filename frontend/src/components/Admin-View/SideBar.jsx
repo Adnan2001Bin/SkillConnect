@@ -16,7 +16,7 @@ const AdminSideBar = () => {
     { icon: <FaHome />, label: "Dashboard", path: "/admin/dashboard" },
     { icon: <FaUserPlus />, label: "Add Talent", path: "/admin/add-talent" },
     { icon: <FaUsers />, label: "Users", path: "/admin/user-management" },
-    { icon: <FaChartBar />, label: "Analytics", path: "/admin/analytics" },
+    { icon: <FaChartBar />, label: "Analytics", path: "/admin/talent-management" },
     { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
   ];
 

@@ -16,6 +16,7 @@ import Login from "./pages/Auth/Login";
 import { useAuthStore } from "./store/authStore";
 import ProtectedRoute from "./components/CheckAuth";
 import Loader from "./components/Loader/Loader";
+import Home from "./pages/User/Home";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -65,7 +66,7 @@ function App() {
       path: "/",
       element: <UserLayout />,
       children: [
-        { path: "", element: <TalentDashboard /> }, // Default route for "/"
+        { path: "", element: <Home /> }, // Default route for "/"
       ],
     },
   ]);

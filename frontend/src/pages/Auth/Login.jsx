@@ -24,8 +24,14 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login(formData);
-      // Navigate based on user role
-      navigate(response.user.role === "admin" ? "/admin/dashboard" : "/");
+      const role = response.user.role;
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "talent") {
+        navigate("/talent/dashboard");
+      } else {
+        navigate("/"); 
+      }
     } catch (error) {
       console.error("Login error:", error);
     }
