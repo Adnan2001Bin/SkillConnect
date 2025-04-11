@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import './App.css'
-import { Button } from "./components/ui/button";
+// src/App.jsx
+import { useEffect } from "react";
+import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import AdminLayout from "./pages/Admin-View/Layout";
 import AdminDashboard from "./pages/Admin-View/Dashboard";
@@ -14,73 +14,69 @@ import AuthLayout from "./pages/Auth/Layout";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import { useAuthStore } from "./store/authStore";
+import ProtectedRoute from "./components/CheckAuth";
+import Loader from "./components/Loader/Loader";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const { user, isLoading, checkAuth } = useAuthStore();
+  const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     // Check authentication status when the app loads
     checkAuth();
   }, [checkAuth]);
 
-  console.log("user:", user);
-    
-  
-
   const router = createBrowserRouter([
-
     {
-      path:"auth",
-      element:(<AuthLayout />),
-
-      children:[
-        {path:"register" , element:<Register />},
-        {path:"login" , element:<Login />},
-      ]
-    },
-
-    {
-      path: "admin",
-      element:(
-        <AdminLayout />
+      path: "/auth",
+      element: (
+        <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+          <AuthLayout />
+        </ProtectedRoute>
       ),
       children: [
-        {path:"dashboard" , element:<AdminDashboard />},
-        {path:"talent-management" , element:<TalentManagement />},
-        {path:"add-talent" , element:<AddTalent />},
-        {path:"user-management" , element:<UserManagement />},
-        
-      ]
+        { path: "register", element: <Register /> },
+        { path: "login", element: <Login /> },
+      ],
     },
-
     {
-      path: "talent",
-      element:(
-        <TalentLayout />
+      path: "/admin",
+      element: (
+        <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+          <AdminLayout />
+        </ProtectedRoute>
       ),
       children: [
-        {path:"dashboard" , element:<TalentDashboard />},
-        
-      ]
+        { path: "dashboard", element: <AdminDashboard /> },
+        { path: "talent-management", element: <TalentManagement /> },
+        { path: "add-talent", element: <AddTalent /> },
+        { path: "user-management", element: <UserManagement /> },
+      ],
     },
-
+    {
+      path: "/talent",
+      element: (
+        <ProtectedRoute isAuthenticated={isAuthenticated} user={user}>
+          <TalentLayout />
+        </ProtectedRoute>
+      ),
+      children: [{ path: "dashboard", element: <TalentDashboard /> }],
+    },
     {
       path: "/",
-      element:(
-        <UserLayout />
-      ),
+      element: <UserLayout />,
       children: [
-        {path:"dashboard" , element:<TalentDashboard />},
-        
-      ]
+        { path: "", element: <TalentDashboard /> }, // Default route for "/"
+      ],
     },
+  ]);
 
-  ])
+  if (isLoading) {
+    return <Loader text="Checking authentication..." />;
+  }
 
   return (
     <div>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </div>
   );
 }

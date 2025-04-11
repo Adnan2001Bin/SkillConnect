@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import AuthForm from "@/components/Auth/AuthForm";
 import InputField from "@/components/Auth/InputField";
 import logo from "../../assets/logo.png";
+import Loader from "@/components/Loader/Loader";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,16 +23,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData);
-      navigate("/"); // Redirect to dashboard after successful login
+      const response = await login(formData);
+      // Navigate based on user role
+      navigate(response.user.role === "admin" ? "/admin/dashboard" : "/");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
+  if (isLoading) {
+    return <Loader text="Signing in..." />;
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
-      {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/70"></div>
         <img
@@ -53,7 +58,7 @@ const Login = () => {
             <p className="text-sm text-gray-500">
               Don't have an account?{" "}
               <a
-                href="/register"
+                href="/auth/register"
                 className="font-medium text-white hover:text-gray-300 transition-colors duration-200"
               >
                 Sign up
