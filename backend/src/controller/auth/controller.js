@@ -5,7 +5,7 @@ import ms from "ms";
 import transporter from "../../config/nodemailer.js";
 
 //Create JWT
-const createToken = (user) => {
+export const createToken = (user) => {
   const { _id, role, email, name } = user;
 
   return jwt.sign(
@@ -16,7 +16,7 @@ const createToken = (user) => {
 };
 
 // Utility: Validate Request Body
-const validateFields = (fields, body) => {
+export const validateFields = (fields, body) => {
   const isValid = fields.every((field) => body[field]);
   if (!isValid) {
     throw new Error(`Missing required fields: ${fields.join(", ")}`);
@@ -24,7 +24,7 @@ const validateFields = (fields, body) => {
 };
 
 // Utility: Send Email
-const sendEmail = async (options) => {
+export const sendEmail = async (options) => {
   try {
     await transporter.sendMail(options);
   } catch (error) {
@@ -201,7 +201,6 @@ export const isAuthenticated = async (req, res) => {
     });
   }
 };
-
 
 // Logout User
 export const logoutUser = (req, res) => {
