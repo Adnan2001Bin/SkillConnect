@@ -3,7 +3,7 @@ import { useAuthStore } from "@/store/authStore";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import { containerVariants,childVariants } from "@/utils/Auth/animationVariants";
+import { containerVariants, childVariants } from "@/utils/Auth/animationVariants";
 
 const AddTalent = () => {
   const [formData, setFormData] = useState({
@@ -29,13 +29,12 @@ const AddTalent = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { isLoading, error, clearError,setError} = useAuthStore();
+  const { isLoading, error, clearError, setError } = useAuthStore();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     clearError();
   };
 
@@ -63,13 +62,7 @@ const AddTalent = () => {
       [type]: [
         ...prev[type],
         type === "experience"
-          ? {
-              company: "",
-              role: "",
-              startDate: "",
-              endDate: "",
-              description: "",
-            }
+          ? { company: "", role: "", startDate: "", endDate: "", description: "" }
           : {
               institution: "",
               degree: "",
@@ -95,7 +88,6 @@ const AddTalent = () => {
       if (formData.profileImage) {
         formDataToSend.append("profileImage", formData.profileImage);
       }
-      console.log("FormData entries:", [...formDataToSend]);
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/admin/add-talent`,
         {
@@ -118,32 +110,33 @@ const AddTalent = () => {
   if (isLoading) {
     return <Loader text="Adding talent..." />;
   }
+
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen bg-gray-800 p-6"
+      className="min-h-screen bg-gray-800 p-4 sm:p-6 lg:p-8"
     >
-      <div className="max-w-2xl mx-auto bg-gray-900 rounded-lg shadow-xl p-8">
+      <div className="max-w-full sm:max-w-3xl mx-auto bg-gray-900 rounded-lg shadow-xl p-4 sm:p-6 lg:p-8">
         <motion.h1
           variants={childVariants}
-          className="text-2xl font-bold text-white mb-6"
+          className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 sm:mb-6 text-center sm:text-left"
         >
           Add New Talent
         </motion.h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {error && (
             <motion.div
               variants={childVariants}
-              className="p-3 bg-red-500/20 text-red-300 rounded-lg text-sm"
+              className="p-3 bg-red-500/20 text-red-300 rounded-lg text-xs sm:text-sm text-center sm:text-left"
             >
               {error}
             </motion.div>
           )}
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Full Name
             </label>
             <input
@@ -152,13 +145,13 @@ const AddTalent = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
               placeholder="John Doe"
             />
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Email Address
             </label>
             <input
@@ -167,13 +160,13 @@ const AddTalent = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
               placeholder="talent@example.com"
             />
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Password
             </label>
             <input
@@ -182,16 +175,16 @@ const AddTalent = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
               placeholder="••••••••"
             />
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Profile Image
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
               <input
                 type="file"
                 name="profileImage"
@@ -203,7 +196,7 @@ const AddTalent = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current.click()}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200"
+                className="px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 text-sm sm:text-base"
               >
                 Upload Image
               </button>
@@ -211,7 +204,7 @@ const AddTalent = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="w-24 h-24 rounded-full overflow-hidden"
+                  className="w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden"
                 >
                   <img
                     src={imagePreview}
@@ -221,13 +214,13 @@ const AddTalent = () => {
                 </motion.div>
               )}
             </div>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
               Accepted formats: JPG, PNG (max 5MB)
             </p>
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Skills (comma-separated)
             </label>
             <input
@@ -235,13 +228,13 @@ const AddTalent = () => {
               type="text"
               value={formData.skills}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
               placeholder="JavaScript, Python, React"
             />
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Portfolio URL
             </label>
             <input
@@ -249,19 +242,19 @@ const AddTalent = () => {
               type="url"
               value={formData.portfolio}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
               placeholder="https://portfolio.example.com"
             />
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <h2 className="text-lg font-semibold text-white mb-4">
+            <h2 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-4">
               Experience
             </h2>
             {formData.experience.map((exp, index) => (
               <div
                 key={index}
-                className="space-y-4 mb-4 p-4 bg-gray-800 rounded-lg"
+                className="space-y-4 mb-4 p-3 sm:p-4 bg-gray-800 rounded-lg"
               >
                 <input
                   type="text"
@@ -270,7 +263,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "company", "experience", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="text"
@@ -279,7 +272,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "role", "experience", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="date"
@@ -287,7 +280,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "startDate", "experience", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="date"
@@ -295,7 +288,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "endDate", "experience", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <textarea
                   placeholder="Description"
@@ -303,25 +296,27 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "description", "experience", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
               </div>
             ))}
             <button
               type="button"
               onClick={() => addArrayItem("experience")}
-              className="text-indigo-400 hover:text-indigo-300"
+              className="text-indigo-400 hover:text-indigo-300 text-sm sm:text-base"
             >
               + Add Experience
             </button>
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <h2 className="text-lg font-semibold text-white mb-4">Education</h2>
+            <h2 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-4">
+              Education
+            </h2>
             {formData.education.map((edu, index) => (
               <div
                 key={index}
-                className="space-y-4 mb-4 p-4 bg-gray-800 rounded-lg"
+                className="space-y-4 mb-4 p-3 sm:p-4 bg-gray-800 rounded-lg"
               >
                 <input
                   type="text"
@@ -330,7 +325,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "institution", "education", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="text"
@@ -339,7 +334,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "degree", "education", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="text"
@@ -348,7 +343,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "fieldOfStudy", "education", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="date"
@@ -356,7 +351,7 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "startDate", "education", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
                 <input
                   type="date"
@@ -364,14 +359,14 @@ const AddTalent = () => {
                   onChange={(e) =>
                     handleArrayChange(index, "endDate", "education", e)
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm sm:text-base"
                 />
               </div>
             ))}
             <button
               type="button"
               onClick={() => addArrayItem("education")}
-              className="text-indigo-400 hover:text-indigo-300"
+              className="text-indigo-400 hover:text-indigo-300 text-sm sm:text-base"
             >
               + Add Education
             </button>
@@ -381,7 +376,7 @@ const AddTalent = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm sm:text-base"
             >
               {isLoading ? "Adding..." : "Add Talent"}
             </button>

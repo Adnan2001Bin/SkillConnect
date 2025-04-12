@@ -13,17 +13,17 @@ const AdminHeader = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
   const getInitials = () => {
-    if (!user) return 'AD';
+    if (!user) return "AD";
     if (user.name) {
-      const names = user.name.split(' ');
-      return names.length > 1 
+      const names = user.name.split(" ");
+      return names.length > 1
         ? `${names[0][0]}${names[1][0]}`.toUpperCase()
         : names[0].slice(0, 2).toUpperCase();
     }
@@ -33,26 +33,27 @@ const AdminHeader = () => {
   if (isLoading) {
     return <Loader text="Logging out..." />;
   }
+
   return (
     <motion.header
       initial="hidden"
       animate="visible"
       variants={headerVariants}
-      className="fixed top-0 left-0 right-0 h-20 bg-gray-900 border-b border-gray-800 z-40"
+      className="fixed top-0 left-0 right-0 h-16 sm:h-20 bg-gray-900 border-b border-gray-800 z-40"
     >
-      <div className="flex items-center justify-between px-6 h-full ml-64">
-        <h1 className="text-lg font-semibold text-white bg-black w-38 h-12 flex items-center justify-center rounded-3xl">
+      <div className="flex items-center justify-between px-4 sm:px-6 h-full sm:ml-0 md:ml-48 lg:ml-64">
+        <h1 className="text-sm sm:text-lg font-semibold text-white bg-black w-32 sm:w-36 h-10 sm:h-12 flex items-center justify-center rounded-3xl">
           Admin Panel
         </h1>
-        
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-2 sm:gap-4">
           <motion.button
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
+            className="text-gray-300 hover:text-white transition-colors duration-200 p-2"
           >
-            <FaBell className="text-xl" />
+            <FaBell className="text-lg sm:text-xl" />
           </motion.button>
 
           <motion.button
@@ -61,11 +62,11 @@ const AdminHeader = () => {
             whileTap="tap"
             onClick={handleLogout}
             disabled={isLoading}
-            className="flex items-center gap-2 text-gray-300 hover:text-white bg-gray-800 px-3 py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 sm:gap-2 text-gray-300 hover:text-white bg-gray-800 px-2 sm:px-3 py-1 sm:py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
             {isLoading ? (
               <svg
-                className="animate-spin h-5 w-5 mr-2 text-white"
+                className="animate-spin h-4 sm:h-5 w-4 sm:w-5 mr-1 sm:mr-2 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -85,9 +86,9 @@ const AdminHeader = () => {
                 ></path>
               </svg>
             ) : (
-              <FaSignOutAlt className="text-xl" />
+              <FaSignOutAlt className="text-lg sm:text-xl" />
             )}
-            <span>{isLoading ? 'Logging out...' : 'Logout'}</span>
+            <span>{isLoading ? "Logging out..." : "Logout"}</span>
           </motion.button>
 
           <motion.div
@@ -95,8 +96,8 @@ const AdminHeader = () => {
             whileHover="hover"
             className="flex items-center gap-2"
           >
-            <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
-              <span className="text-white">{getInitials()}</span>
+            <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-gray-700 flex items-center justify-center">
+              <span className="text-white text-sm sm:text-base">{getInitials()}</span>
             </div>
           </motion.div>
         </div>

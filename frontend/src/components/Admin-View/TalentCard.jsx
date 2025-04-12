@@ -1,4 +1,3 @@
-// src/components/Admin/Talent/TalentCard.jsx
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -24,42 +23,44 @@ const TalentCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+      className="bg-gray-800 rounded-xl shadow-lg overflow-hidden w-full"
     >
       {/* Card Header */}
       <div
-        className="flex items-center p-6 cursor-pointer hover:bg-gray-750 transition-colors"
+        className="flex flex-col sm:flex-row items-center p-4 sm:p-6 cursor-pointer hover:bg-gray-750 transition-colors"
         onClick={() => toggleCard(talent._id)}
       >
-        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0 mr-6">
+        <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-full overflow-hidden flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
           <img
             src={talent.profileImage || "https://via.placeholder.com/150?text=No+Image"}
             alt={`${talent.name}'s profile`}
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="flex-1">
-          <h2 className="text-2xl font-semibold text-white">{talent.name}</h2>
-          <p className="text-gray-300">{talent.email}</p>
-          <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex-1 text-center sm:text-left">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white">{talent.name}</h2>
+          <p className="text-gray-300 text-sm sm:text-base">{talent.email}</p>
+          <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
             {talent.skills.slice(0, 3).map((skill, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-full"
+                className="px-2 sm:px-3 py-1 bg-indigo-600 text-white text-xs sm:text-sm rounded-full"
               >
                 {skill}
               </span>
             ))}
             {talent.skills.length > 3 && (
-              <span className="text-gray-400">+{talent.skills.length - 3}</span>
+              <span className="text-gray-400 text-xs sm:text-sm">
+                +{talent.skills.length - 3}
+              </span>
             )}
           </div>
         </div>
-        <div className="ml-4">
+        <div className="mt-4 sm:mt-0 sm:ml-4">
           {isExpanded ? (
-            <FaChevronUp className="text-indigo-400 text-xl" />
+            <FaChevronUp className="text-indigo-400 text-lg sm:text-xl" />
           ) : (
-            <FaChevronDown className="text-indigo-400 text-xl" />
+            <FaChevronDown className="text-indigo-400 text-lg sm:text-xl" />
           )}
         </div>
       </div>
@@ -72,7 +73,7 @@ const TalentCard = ({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="p-6 bg-gray-850 border-t border-gray-700"
+            className="p-4 sm:p-6 bg-gray-850 border-t border-gray-700"
           >
             {isEditing ? (
               <EditForm

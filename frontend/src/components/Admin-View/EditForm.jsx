@@ -1,4 +1,3 @@
-// src/components/Admin/Talent/EditForm.jsx
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -60,27 +59,27 @@ const EditForm = ({ editTalent, setEditTalent, talent, setTalents, setExpandedCa
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-300">Name</label>
+        <label className="block text-xs sm:text-sm font-medium text-gray-300">Name</label>
         <input
           name="name"
           type="text"
           value={editTalent.name}
           onChange={handleChange}
-          className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full p-2 sm:p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300">Email</label>
+        <label className="block text-xs sm:text-sm font-medium text-gray-300">Email</label>
         <input
           name="email"
           type="email"
           value={editTalent.email}
           onChange={handleChange}
-          className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full p-2 sm:p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300">
+        <label className="block text-xs sm:text-sm font-medium text-gray-300">
           Skills (comma-separated)
         </label>
         <input
@@ -88,11 +87,11 @@ const EditForm = ({ editTalent, setEditTalent, talent, setTalents, setExpandedCa
           type="text"
           value={editTalent.skills}
           onChange={handleChange}
-          className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full p-2 sm:p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300">
+        <label className="block text-xs sm:text-sm font-medium text-gray-300">
           Portfolio URL
         </label>
         <input
@@ -100,31 +99,31 @@ const EditForm = ({ editTalent, setEditTalent, talent, setTalents, setExpandedCa
           type="url"
           value={editTalent.portfolio || ""}
           onChange={handleChange}
-          className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full p-2 sm:p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300">
+        <label className="block text-xs sm:text-sm font-medium text-gray-300">
           Profile Image
         </label>
         <input
           type="file"
           accept="image/*"
           onChange={handleFileChange}
-          className="mt-2 text-gray-300"
+          className="mt-2 text-gray-300 text-sm sm:text-base"
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm sm:text-base"
         >
           Save Changes
         </button>
         <button
           type="button"
           onClick={() => setEditTalent(null)}
-          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          className="px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
         >
           Cancel
         </button>

@@ -1,22 +1,11 @@
-/* Fade-in animation for the form */
-@keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-fadeIn {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
-  
-  /* Input field focus animation */
-  input:focus {
-    transition: all 0.3s ease;
-    border-color: #10B981; /* Green for SkillConnect */
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-  }
+.Toastify__toast {
+  background: #1f2937;
+  color: #d1d5db;
+  border-radius: 0.5rem;
+}
+.Toastify__toast--success {
+  background: #4f46e5;
+}
+.Toastify__toast--error {
+  background: #dc2626;
+}

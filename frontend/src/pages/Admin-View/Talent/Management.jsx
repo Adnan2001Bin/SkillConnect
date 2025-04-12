@@ -1,4 +1,3 @@
-// src/pages/Admin-View/Talent/Management.jsx
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
@@ -89,21 +88,21 @@ const TalentManagement = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-red-400">{error}</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        <p className="text-red-400 text-center text-sm sm:text-base">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-6 lg:p-8">
       <ToastContainer />
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-full mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-4xl font-bold text-white mb-12 text-center"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8 sm:mb-10 lg:mb-12 text-center"
         >
           Talent Management
         </motion.h1>
@@ -112,12 +111,12 @@ const TalentManagement = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-gray-400 text-center text-lg"
+            className="text-gray-400 text-center text-sm sm:text-base lg:text-lg"
           >
             No talents added yet.
           </motion.p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {talents.map((talent) => (
               <TalentCard
                 key={talent._id}

@@ -9,14 +9,13 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-gray-700">
       <AdminHeader />
       <AdminSideBar />
-      
       <motion.main
         initial="hidden"
         animate="visible"
         variants={mainVariants}
-        className="ml-64 pt-16 p-6 min-h-screen"
+        className="pt-16 p-4 sm:p-6 lg:p-8 sm:ml-0 md:ml-48 lg:ml-64 min-h-screen"
       >
-        <div className="max-w-7xl mx-auto mt-10">
+        <div className="max-w-full mx-auto mt-15">
           <Outlet />
         </div>
       </motion.main>
