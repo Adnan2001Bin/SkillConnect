@@ -4,7 +4,6 @@ import cloudinary from "../../config/cloudinary.js";
 import { User } from "../../models/auth/user.model.js";
 import bcrypt from "bcryptjs";
 
-
 export const addTalent = async (req, res) => {
   try {
     // Ensure the user is an admin
@@ -122,8 +121,6 @@ export const addTalent = async (req, res) => {
   }
 };
 
-
-
 export const getTalents = async (req, res) => {
   try {
     // Fetch all talents, no restriction on createdBy
@@ -139,6 +136,122 @@ export const getTalents = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "An error occurred while fetching talents",
+    });
+  }
+};
+
+// Update Talent (Admin Only)
+export const updateTalent = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only admins can update talents",
+      });
+    }
+
+    const { id } = req.params;
+
+    const { name, email, password, skills, portfolio, experience, education } =
+      req.body;
+
+    const talent = await User.findOne({
+      _id: id,
+      role: "talent",
+      createdBy: req.user.id,
+    });
+
+    if (!talent) {
+      return res.status(404).json({
+        success: false,
+        message: "Talent not found or not authorized to update",
+      });
+    }
+
+    // Update fields
+    if (name) talent.name = name;
+    if (email) talent.email = email;
+    if (password) talent.password = await bcrypt.hash(password, 12);
+    if (skills) talent.skills = skills.split(",").map((skill) => skill.trim());
+    if (portfolio) talent.portfolio = portfolio;
+    if (experience) talent.experience = JSON.parse(experience);
+    if (education) talent.education = JSON.parse(education);
+
+    // Handle image update
+    if (req.file) {
+      const stream = Readable.from(req.file.buffer);
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "skillconnect/talents",
+            allowed_formats: ["jpg", "png", "jpeg"],
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        stream.pipe(uploadStream);
+      });
+      talent.profileImage = uploadResult.secure_url;
+    }
+
+    await talent.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Talent updated successfully",
+      talent: talent.toObject({
+        getters: true,
+        versionKey: false,
+        transform: (doc, ret) => {
+          delete ret.password;
+          return ret;
+        },
+      }),
+    });
+  } catch (error) {
+    console.error("Error updating talent:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while updating the talent",
+    });
+  }
+};
+
+// Delete Talent (Admin Only)
+export const deleteTalent = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only admins can delete talents",
+      });
+    }
+
+    const { id } = req.params;
+    const talent = await User.findByIdAndDelete({
+      _id: id,
+      role: "talent",
+      createdBy: req.user.id, // Ensure only talents created by this admin can be deleted
+    });
+
+    if (!talent) {
+      return res.status(404).json({
+        success: false,
+        message: "Talent not found or not authorized to delete",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Talent deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting talent:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while deleting the talent",
     });
   }
 };

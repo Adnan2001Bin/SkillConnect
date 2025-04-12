@@ -6,6 +6,7 @@ import {
   FaChartBar, 
   FaCog 
 } from 'react-icons/fa';
+import { MdManageAccounts } from "react-icons/md";
 import { NavLink } from 'react-router';
 import { sidebarVariants,navItemVariants } from '@/utils/Admin/animationVariants';
 import logo from "../../assets/logo.png"
@@ -16,7 +17,7 @@ const AdminSideBar = () => {
     { icon: <FaHome />, label: "Dashboard", path: "/admin/dashboard" },
     { icon: <FaUserPlus />, label: "Add Talent", path: "/admin/add-talent" },
     { icon: <FaUsers />, label: "Users", path: "/admin/user-management" },
-    { icon: <FaChartBar />, label: "Analytics", path: "/admin/talent-management" },
+    { icon: <MdManageAccounts />, label: "Talent-Management", path: "/admin/talent-management" },
     { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
   ];
 
