@@ -116,7 +116,7 @@ const AddTalent = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen bg-gray-800 p-4 sm:p-6 lg:p-8"
+      className="min-h-screen bg-gray-800 p-4 sm:p-6 lg:p-8 rounded-3xl"
     >
       <div className="max-w-full sm:max-w-3xl mx-auto bg-gray-900 rounded-lg shadow-xl p-4 sm:p-6 lg:p-8">
         <motion.h1
