@@ -68,9 +68,11 @@ function App() {
       element: <UserLayout />,
       children: [
         { 
-          path: "", element: <Home />,
+          path: "/", element: <Home />,
+         }, 
+         {
           path: "talentlist", element: <Talent />
-         }, // Default route for "/"
+         }
       ],
     },
   ]);
