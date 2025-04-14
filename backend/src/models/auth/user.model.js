@@ -1,4 +1,3 @@
-// backend/models/auth/user.model.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -27,10 +26,26 @@ const userSchema = new mongoose.Schema(
       default: "user",
       required: true,
     },
-    skills: [
+    category: {
+      type: String,
+      trim: true,
+      required: [function () { return this.role === "talent"; }, "Category is required for talents"],
+      enum: [
+        "programming",
+        "graphics",
+        "marketing",
+        "video",
+        "ai",
+        "business",
+        "writing",
+        "consulting",
+      ], // Match categories from config/index.js
+    },
+    services: [
       {
         type: String,
         trim: true,
+        required: [function () { return this.role === "talent"; }, "At least one service is required for talents"],
       },
     ],
     portfolio: {

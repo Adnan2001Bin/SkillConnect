@@ -103,3 +103,237 @@ export const popularServices = [
     path: "/talentlist?category=business",
   },
 ];
+
+
+
+
+export const allServices = [
+  // Programming & Tech
+  {
+    id: "1",
+    title: "Website Development",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "2",
+    title: "Software Development",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "3",
+    title: "Mobile App Development",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "4",
+    title: "Backend Development",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "5",
+    title: "Frontend Development",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "6",
+    title: "DevOps",
+    path: "/talentlist?category=programming",
+  },
+  {
+    id: "7",
+    title: "Database Management",
+    path: "/talentlist?category=programming",
+  },
+  // Graphics & Design
+  {
+    id: "8",
+    title: "Logo Design",
+    path: "/talentlist?category=graphics",
+  },
+  {
+    id: "9",
+    title: "Illustration",
+    path: "/talentlist?category=graphics",
+  },
+  {
+    id: "10",
+    title: "UI/UX Design",
+    path: "/talentlist?category=graphics",
+  },
+  {
+    id: "11",
+    title: "Brand Identity Design",
+    path: "/talentlist?category=graphics",
+  },
+  {
+    id: "12",
+    title: "Packaging Design",
+    path: "/talentlist?category=graphics",
+  },
+  {
+    id: "13",
+    title: "Motion Graphics",
+    path: "/talentlist?category=graphics",
+  },
+  // Digital Marketing
+  {
+    id: "14",
+    title: "E-Commerce Marketing",
+    path: "/talentlist?category=marketing",
+  },
+  {
+    id: "15",
+    title: "Social Media Marketing",
+    path: "/talentlist?category=marketing",
+  },
+  {
+    id: "16",
+    title: "SEO Services",
+    path: "/talentlist?category=marketing",
+  },
+  {
+    id: "17",
+    title: "Content Marketing",
+    path: "/talentlist?category=marketing",
+  },
+  {
+    id: "18",
+    title: "Email Marketing",
+    path: "/talentlist?category=marketing",
+  },
+  {
+    id: "19",
+    title: "PPC Advertising",
+    path: "/talentlist?category=marketing",
+  },
+  // Video & Animation
+  {
+    id: "20",
+    title: "Video Editing",
+    path: "/talentlist?category=video",
+  },
+  {
+    id: "21",
+    title: "Motion Graphics",
+    path: "/talentlist?category=video",
+  },
+  {
+    id: "22",
+    title: "Animation",
+    path: "/talentlist?category=video",
+  },
+  {
+    id: "23",
+    title: "Video Production",
+    path: "/talentlist?category=video",
+  },
+  {
+    id: "24",
+    title: "Whiteboard Animation",
+    path: "/talentlist?category=video",
+  },
+  // AI Services
+  {
+    id: "25",
+    title: "Data Science & ML",
+    path: "/talentlist?category=ai",
+  },
+  {
+    id: "26",
+    title: "AI Development",
+    path: "/talentlist?category=ai",
+  },
+  {
+    id: "27",
+    title: "Chatbot Development",
+    path: "/talentlist?category=ai",
+  },
+  {
+    id: "28",
+    title: "Predictive Analytics",
+    path: "/talentlist?category=ai",
+  },
+  {
+    id: "29",
+    title: "Natural Language Processing",
+    path: "/talentlist?category=ai",
+  },
+  // Business
+  {
+    id: "30",
+    title: "Financial Consulting",
+    path: "/talentlist?category=business",
+  },
+  {
+    id: "31",
+    title: "Business Planning",
+    path: "/talentlist?category=business",
+  },
+  {
+    id: "32",
+    title: "Market Research",
+    path: "/talentlist?category=business",
+  },
+  {
+    id: "33",
+    title: "Project Management",
+    path: "/talentlist?category=business",
+  },
+  {
+    id: "34",
+    title: "E-Commerce Strategy",
+    path: "/talentlist?category=business",
+  },
+  // Writing & Translation
+  {
+    id: "35",
+    title: "Content Writing",
+    path: "/talentlist?category=writing",
+  },
+  {
+    id: "36",
+    title: "Copywriting",
+    path: "/talentlist?category=writing",
+  },
+  {
+    id: "37",
+    title: "Technical Writing",
+    path: "/talentlist?category=writing",
+  },
+  {
+    id: "38",
+    title: "Translation",
+    path: "/talentlist?category=writing",
+  },
+  {
+    id: "39",
+    title: "Editing & Proofreading",
+    path: "/talentlist?category=writing",
+  },
+  // Consulting
+  {
+    id: "40",
+    title: "Strategy Consulting",
+    path: "/talentlist?category=consulting",
+  },
+  {
+    id: "41",
+    title: "HR Consulting",
+    path: "/talentlist?category=consulting",
+  },
+  {
+    id: "42",
+    title: "IT Consulting",
+    path: "/talentlist?category=consulting",
+  },
+  {
+    id: "43",
+    title: "Legal Consulting",
+    path: "/talentlist?category=consulting",
+  },
+  {
+    id: "44",
+    title: "Management Consulting",
+    path: "/talentlist?category=consulting",
+  },
+];

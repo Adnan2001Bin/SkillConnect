@@ -1,3 +1,4 @@
+// src/pages/TalentManagement.jsx
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
@@ -77,7 +78,7 @@ const TalentManagement = () => {
 
   // Start editing a talent
   const handleEdit = (talent) => {
-    setEditTalent({ ...talent, skills: talent.skills.join(", ") });
+    setEditTalent({ ...talent });
     setExpandedCard(talent._id);
   };
 

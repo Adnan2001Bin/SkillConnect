@@ -25,7 +25,6 @@ const TalentCard = ({
       transition={{ duration: 0.5 }}
       className="bg-gray-800 rounded-xl shadow-lg overflow-hidden w-full"
     >
-      {/* Card Header */}
       <div
         className="flex flex-col sm:flex-row items-center p-4 sm:p-6 cursor-pointer hover:bg-gray-750 transition-colors"
         onClick={() => toggleCard(talent._id)}
@@ -40,18 +39,19 @@ const TalentCard = ({
         <div className="flex-1 text-center sm:text-left">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white">{talent.name}</h2>
           <p className="text-gray-300 text-sm sm:text-base">{talent.email}</p>
+          <p className="text-gray-400 text-xs sm:text-sm mt-1">{talent.category}</p>
           <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
-            {talent.skills.slice(0, 3).map((skill, index) => (
+            {talent.services.slice(0, 3).map((service, index) => (
               <span
                 key={index}
                 className="px-2 sm:px-3 py-1 bg-indigo-600 text-white text-xs sm:text-sm rounded-full"
               >
-                {skill}
+                {service}
               </span>
             ))}
-            {talent.skills.length > 3 && (
+            {talent.services.length > 3 && (
               <span className="text-gray-400 text-xs sm:text-sm">
-                +{talent.skills.length - 3}
+                +{talent.services.length - 3}
               </span>
             )}
           </div>
@@ -65,7 +65,6 @@ const TalentCard = ({
         </div>
       </div>
 
-      {/* Expanded Details */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div

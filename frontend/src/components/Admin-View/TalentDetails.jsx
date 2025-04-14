@@ -3,7 +3,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const TalentDetails = ({ talent, onEdit, onDelete }) => {
-  // Custom toast confirmation for delete
   const confirmDelete = (id) => {
     toast(
       <div>
@@ -50,16 +49,22 @@ const TalentDetails = ({ talent, onEdit, onDelete }) => {
           </a>
         </p>
       )}
-      {talent.skills && talent.skills.length > 0 && (
+      {talent.category && (
+        <p className="text-sm sm:text-base">
+          <span className="font-semibold text-white">Category:</span>{" "}
+          {talent.category}
+        </p>
+      )}
+      {talent.services && talent.services.length > 0 && (
         <div>
-          <p className="font-semibold text-white text-sm sm:text-base">Skills:</p>
+          <p className="font-semibold text-white text-sm sm:text-base">Services:</p>
           <div className="flex flex-wrap gap-2 mt-2">
-            {talent.skills.map((skill, index) => (
+            {talent.services.map((service, index) => (
               <span
                 key={index}
                 className="px-2 sm:px-3 py-1 bg-indigo-600 text-white text-xs sm:text-sm rounded-full"
               >
-                {skill}
+                {service}
               </span>
             ))}
           </div>

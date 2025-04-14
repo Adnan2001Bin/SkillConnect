@@ -1,16 +1,19 @@
+// src/pages/AddTalent.jsx
 import Loader from "@/components/Loader/Loader";
 import { useAuthStore } from "@/store/authStore";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { containerVariants, childVariants } from "@/utils/Auth/animationVariants";
+import { categories, allServices } from "@/config"; 
 
 const AddTalent = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    skills: "",
+    category: "",
+    services: [],
     portfolio: "",
     profileImage: null,
     experience: [
@@ -36,6 +39,20 @@ const AddTalent = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     clearError();
+    if (name === "category") {
+      setFormData((prev) => ({ ...prev, services: [] }));
+    }
+  };
+
+  const handleServicesChange = (e) => {
+    const options = e.target.options;
+    const selectedServices = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedServices.push(options[i].value);
+      }
+    }
+    setFormData((prev) => ({ ...prev, services: selectedServices }));
   };
 
   const handleFileChange = (e) => {
@@ -81,7 +98,8 @@ const AddTalent = () => {
       formDataToSend.append("name", formData.name);
       formDataToSend.append("email", formData.email);
       formDataToSend.append("password", formData.password);
-      formDataToSend.append("skills", formData.skills);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("services", JSON.stringify(formData.services));
       formDataToSend.append("portfolio", formData.portfolio);
       formDataToSend.append("experience", JSON.stringify(formData.experience));
       formDataToSend.append("education", JSON.stringify(formData.education));
@@ -106,6 +124,15 @@ const AddTalent = () => {
       setError(error.message);
     }
   };
+
+  const getCategoryFromPath = (path) => {
+    const params = new URLSearchParams(path.split("?")[1]);
+    return params.get("category");
+  };
+
+  const filteredServices = allServices.filter( // Changed to allServices
+    (service) => getCategoryFromPath(service.path) === formData.category
+  );
 
   if (isLoading) {
     return <Loader text="Adding talent..." />;
@@ -221,16 +248,54 @@ const AddTalent = () => {
 
           <motion.div variants={childVariants}>
             <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-              Skills (comma-separated)
+              Category
             </label>
-            <input
-              name="skills"
-              type="text"
-              value={formData.skills}
+            <select
+              name="category"
+              value={formData.category}
               onChange={handleChange}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
-              placeholder="JavaScript, Python, React"
-            />
+              required
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
+            >
+              <option value="" disabled>
+                Select a category
+              </option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={getCategoryFromPath(cat.path)}>
+                  {cat.title}
+                </option>
+              ))}
+            </select>
+          </motion.div>
+
+          <motion.div variants={childVariants}>
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+              Services
+            </label>
+            <select
+              multiple
+              name="services"
+              value={formData.services}
+              onChange={handleServicesChange}
+              required
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base max-h-40 overflow-y-auto"
+              disabled={!formData.category}
+            >
+              {filteredServices.length > 0 ? (
+                filteredServices.map((service) => (
+                  <option key={service.id} value={service.title}>
+                    {service.title}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Select a category first
+                </option>
+              )}
+            </select>
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
+              Hold Ctrl (Windows) or Cmd (Mac) to select multiple services
+            </p>
           </motion.div>
 
           <motion.div variants={childVariants}>
@@ -368,7 +433,7 @@ const AddTalent = () => {
               onClick={() => addArrayItem("education")}
               className="text-indigo-400 hover:text-indigo-300 text-sm sm:text-base"
             >
-              + Add Education
+              + Add Educationc
             </button>
           </motion.div>
 

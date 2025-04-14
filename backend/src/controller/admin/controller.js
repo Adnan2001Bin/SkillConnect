@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 
 export const addTalent = async (req, res) => {
   try {
-    // Ensure the user is an admin
     if (req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
@@ -14,13 +13,12 @@ export const addTalent = async (req, res) => {
       });
     }
 
-    const { name, email, password, skills, portfolio, experience, education } =
+    const { name, email, password, category, services, portfolio, experience, education } =
       req.body;
 
     // Validate required fields
-    validateFields(["name", "email", "password"], req.body);
+    validateFields(["name", "email", "password", "category", "services"], req.body);
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -30,8 +28,6 @@ export const addTalent = async (req, res) => {
     }
 
     let profileImageUrl = null;
-
-    // Handle image upload to Cloudinary
     if (req.file) {
       const stream = Readable.from(req.file.buffer);
       const uploadResult = await new Promise((resolve, reject) => {
@@ -47,20 +43,18 @@ export const addTalent = async (req, res) => {
         );
         stream.pipe(uploadStream);
       });
-
       profileImageUrl = uploadResult.secure_url;
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create new talent
     const newTalent = new User({
       name,
       email,
       password: hashedPassword,
       role: "talent",
-      skills: skills ? skills.split(",").map((skill) => skill.trim()) : [],
+      category, // Store category
+      services: services ? JSON.parse(services) : [], // Parse services as an array
       portfolio,
       experience: experience ? JSON.parse(experience) : [],
       education: education ? JSON.parse(education) : [],
@@ -70,35 +64,34 @@ export const addTalent = async (req, res) => {
 
     await newTalent.save();
 
-    // Send welcome email to talent
     await sendEmail({
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: "Welcome to SkillConnect - Your Talent Account",
       html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #2c3e50;">Welcome to SkillConnect, ${name}!</h2>
-            <p style="font-size: 16px; color: #34495e;">
-              Your talent account has been created by an admin. You can now log in to explore opportunities and showcase your skills.
-            </p>
-            <p style="font-size: 16px; color: #34495e;">
-              <strong>Email:</strong> ${email}<br />
-              <strong>Password:</strong> ${password} (Please change this after logging in)
-            </p>
-            <p style="font-size: 16px; color: #34495e;">
-              Log in here: <a href="${
-                process.env.FRONTEND_URL || "http://localhost:5500"
-              }/auth/login" style="color: #3498db;">SkillConnect Login</a>
-            </p>
-            <p style="font-size: 14px; color: #7f8c8d; margin-top: 20px;">
-              Need help? Contact us at <a href="mailto:support@skillconnect.com" style="color: #3498db;">support@skillconnect.com</a>.
-            </p>
-            <p style="font-size: 14px; color: #7f8c8d;">
-              Cheers,<br />
-              The SkillConnect Team
-            </p>
-          </div>
-        `,
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #2c3e50;">Welcome to SkillConnect, ${name}!</h2>
+          <p style="font-size: 16px; color: #34495e;">
+            Your talent account has been created by an admin. You can now log in to explore opportunities and showcase your skills.
+          </p>
+          <p style="font-size: 16px; color: #34495e;">
+            <strong>Email:</strong> ${email}<br />
+            <strong>Password:</strong> ${password} (Please change this after logging in)
+          </p>
+          <p style="font-size: 16px; color: #34495e;">
+            Log in here: <a href="${
+              process.env.FRONTEND_URL || "http://localhost:5500"
+            }/auth/login" style="color: #3498db;">SkillConnect Login</a>
+          </p>
+          <p style="font-size: 14px; color: #7f8c8d; margin-top: 20px;">
+            Need help? Contact us at <a href="mailto:support@skillconnect.com" style="color: #3498db;">support@skillconnect.com</a>.
+          </p>
+          <p style="font-size: 14px; color: #7f8c8d;">
+            Cheers,<br />
+            The SkillConnect Team
+          </p>
+        </div>
+      `,
     });
 
     res.status(201).json({
@@ -109,6 +102,8 @@ export const addTalent = async (req, res) => {
         name: newTalent.name,
         email: newTalent.email,
         role: newTalent.role,
+        category: newTalent.category,
+        services: newTalent.services,
         profileImage: newTalent.profileImage,
       },
     });
@@ -151,8 +146,7 @@ export const updateTalent = async (req, res) => {
     }
 
     const { id } = req.params;
-
-    const { name, email, password, skills, portfolio, experience, education } =
+    const { name, email, password, category, services, portfolio, experience, education } =
       req.body;
 
     const talent = await User.findOne({
@@ -172,12 +166,12 @@ export const updateTalent = async (req, res) => {
     if (name) talent.name = name;
     if (email) talent.email = email;
     if (password) talent.password = await bcrypt.hash(password, 12);
-    if (skills) talent.skills = skills.split(",").map((skill) => skill.trim());
+    if (category) talent.category = category;
+    if (services) talent.services = JSON.parse(services);
     if (portfolio) talent.portfolio = portfolio;
     if (experience) talent.experience = JSON.parse(experience);
     if (education) talent.education = JSON.parse(education);
 
-    // Handle image update
     if (req.file) {
       const stream = Readable.from(req.file.buffer);
       const uploadResult = await new Promise((resolve, reject) => {
