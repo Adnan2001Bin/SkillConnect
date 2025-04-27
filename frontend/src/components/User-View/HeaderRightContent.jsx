@@ -28,17 +28,7 @@ const UserHeaderRightContent = ({ isMobile = false }) => {
     }
   };
 
-  // Get user initials for avatar
-  const getInitials = () => {
-    if (!user) return "U";
-    if (user.name) {
-      const names = user.name.split(" ");
-      return names.length > 1
-        ? `${names[0][0]}${names[1][0]}`.toUpperCase()
-        : names[0].slice(0, 2).toUpperCase();
-    }
-    return user.email.slice(0, 2).toUpperCase();
-  };
+  const emailInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "NA"; 
 
   // Animation variants
   const buttonVariants = {
@@ -98,7 +88,7 @@ const UserHeaderRightContent = ({ isMobile = false }) => {
               >
                 <Avatar className="bg-green-500 h-8 w-8 sm:h-10 sm:w-10">
                   <AvatarFallback className="bg-green-500 text-white font-medium">
-                    {getInitials()}
+                    {emailInitials}
                   </AvatarFallback>
                 </Avatar>
               </motion.div>

@@ -28,7 +28,7 @@ export const sidebarVariants = {
   };
   
   export const buttonVariants = {
-    hover: { scale: 1.1 },
+    hover: { scale: 1.02 },
     tap: { scale: 0.9 }
   };
   

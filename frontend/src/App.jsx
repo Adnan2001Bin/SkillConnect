@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/CheckAuth";
 import Loader from "./components/Loader/Loader";
 import Home from "./pages/User/Home";
 import Talent from "./pages/User/Talent";
+import TalentProfile from "./pages/Talent-View/Profile";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -61,7 +62,10 @@ function App() {
           <TalentLayout />
         </ProtectedRoute>
       ),
-      children: [{ path: "dashboard", element: <TalentDashboard /> }],
+      children: [{ path: "dashboard", element: <TalentDashboard /> },
+
+        { path: "profile", element: <TalentProfile /> },
+      ],
     },
     {
       path: "/",

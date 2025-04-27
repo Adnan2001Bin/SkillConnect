@@ -19,16 +19,7 @@ const AdminHeader = () => {
     }
   };
 
-  const getInitials = () => {
-    if (!user) return "AD";
-    if (user.name) {
-      const names = user.name.split(" ");
-      return names.length > 1
-        ? `${names[0][0]}${names[1][0]}`.toUpperCase()
-        : names[0].slice(0, 2).toUpperCase();
-    }
-    return user.email.slice(0, 2).toUpperCase();
-  };
+  const emailInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "NA"; 
 
   if (isLoading) {
     return <Loader text="Logging out..." />;
@@ -97,7 +88,7 @@ const AdminHeader = () => {
             className="flex items-center gap-2"
           >
             <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-gray-700 flex items-center justify-center">
-              <span className="text-white text-sm sm:text-base">{getInitials()}</span>
+              <span className="text-white text-sm sm:text-base">{emailInitials}</span>
             </div>
           </motion.div>
         </div>
