@@ -287,38 +287,63 @@ const TalentApplication = () => {
             </h2>
             {formData.experience.map((exp, index) => (
               <div key={index} className="space-y-4 mb-4 p-4 bg-gray-100 rounded-lg">
-                <input
-                  type="text"
-                  placeholder="Company"
-                  value={exp.company}
-                  onChange={(e) => handleArrayChange(index, "company", "experience", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="text"
-                  placeholder="Role"
-                  value={exp.role}
-                  onChange={(e) => handleArrayChange(index, "role", "experience", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="date"
-                  value={exp.startDate}
-                  onChange={(e) => handleArrayChange(index, "startDate", "experience", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="date"
-                  value={exp.endDate}
-                  onChange={(e) => handleArrayChange(index, "endDate", "experience", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <textarea
-                  placeholder="Description"
-                  value={exp.description}
-                  onChange={(e) => handleArrayChange(index, "description", "experience", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Company"
+                    value={exp.company}
+                    onChange={(e) => handleArrayChange(index, "company", "experience", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Role
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Role"
+                    value={exp.role}
+                    onChange={(e) => handleArrayChange(index, "role", "experience", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    value={exp.startDate}
+                    onChange={(e) => handleArrayChange(index, "startDate", "experience", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    value={exp.endDate}
+                    onChange={(e) => handleArrayChange(index, "endDate", "experience", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    placeholder="Description"
+                    value={exp.description}
+                    onChange={(e) => handleArrayChange(index, "description", "experience", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
                 {formData.experience.length > 1 && (
                   <button
                     type="button"
@@ -345,39 +370,64 @@ const TalentApplication = () => {
             </h2>
             {formData.education.map((edu, index) => (
               <div key={index} className="space-y-4 mb-4 p-4 bg-gray-100 rounded-lg">
-                <input
-                  type="text"
-                  placeholder="Institution"
-                  value={edu.institution}
-                  onChange={(e) => handleArrayChange(index, "institution", "education", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="text"
-                  placeholder="Degree"
-                  value={edu.degree}
-                  onChange={(e) => handleArrayChange(index, "degree", "education", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="text"
-                  placeholder="Field of Study"
-                  value={edu.fieldOfStudy}
-                  onChange={(e) => handleArrayChange(index, "fieldOfStudy", "education", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="date"
-                  value={edu.startDate}
-                  onChange={(e) => handleArrayChange(index, "startDate", "education", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
-                <input
-                  type="date"
-                  value={edu.endDate}
-                  onChange={(e) => handleArrayChange(index, "endDate", "education", e)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Institution
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Institution"
+                    value={edu.institution}
+                    onChange={(e) => handleArrayChange(index, "institution", "education", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Degree
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Degree"
+                    value={edu.degree}
+                    onChange={(e) => handleArrayChange(index, "degree", "education", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Field of Study
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Field of Study"
+                    value={edu.fieldOfStudy}
+                    onChange={(e) => handleArrayChange(index, "fieldOfStudy", "education", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    value={edu.startDate}
+                    onChange={(e) => handleArrayChange(index, "startDate", "education", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    value={edu.endDate}
+                    onChange={(e) => handleArrayChange(index, "endDate", "education", e)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 text-sm sm:text-base"
+                  />
+                </div>
                 {formData.education.length > 1 && (
                   <button
                     type="button"

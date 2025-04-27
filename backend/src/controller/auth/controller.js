@@ -5,6 +5,7 @@ import ms from "ms";
 import transporter from "../../config/nodemailer.js";
 import { TalentApplication } from "../../models/auth/talentApplication.model.js";
 import { Readable } from "stream";
+import cloudinary from "../../config/cloudinary.js"
 //Create JWT
 export const createToken = (user) => {
   const { _id, role, email, name } = user;

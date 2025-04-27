@@ -19,6 +19,7 @@ import Loader from "./components/Loader/Loader";
 import Home from "./pages/User/Home";
 import Talent from "./pages/User/Talent";
 import TalentProfile from "./pages/Talent-View/Profile";
+import TalentApplication from "./pages/User/TalentApplication";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -76,7 +77,8 @@ function App() {
          }, 
          {
           path: "talentlist", element: <Talent />
-         }
+         },
+         { path: "apply-talent", element: <TalentApplication /> },
       ],
     },
   ]);

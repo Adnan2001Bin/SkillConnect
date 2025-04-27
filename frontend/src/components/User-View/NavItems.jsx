@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 const userViewNavItems = [
   { id: "home", label: "Home", path: "/" },
   { id: "talentlist", label: "Talent List", path: "/talentlist" },
+  { id: "apply-talent", label: "Apply as Talent", path: "/apply-talent" }, // Add this
   { id: "about", label: "About", path: "/about" },
   { id: "contact", label: "Contact", path: "/contact" },
 ];
@@ -30,9 +31,7 @@ const NavItems = ({ isMobile = false, onClose }) => {
           className={({ isActive }) =>
             `relative rounded px-3 py-1 transition-all duration-300
             text-gray-700 text-sm sm:text-base font-medium ${
-              isActive
-                ? "bg-green-100 "
-                : "hover:bg-green-100"
+              isActive ? "bg-green-100" : "hover:bg-green-100"
             } ${isMobile ? "text-lg" : ""}`
           }
         >
