@@ -1,6 +1,5 @@
-// src/components/Admin/AdminSideBar.jsx
 import { motion } from "framer-motion";
-import { FaHome, FaUsers, FaUserPlus, FaCog } from "react-icons/fa";
+import { FaHome, FaUsers, FaUserPlus, FaCog, FaClipboardList } from "react-icons/fa"; // Add FaClipboardList
 import { MdManageAccounts } from "react-icons/md";
 import { NavLink } from "react-router";
 import { sidebarVariants, navItemVariants } from "@/utils/Admin/animationVariants";
@@ -16,12 +15,12 @@ const AdminSideBar = () => {
     { icon: <FaUserPlus />, label: "Add Talent", path: "/admin/add-talent" },
     { icon: <FaUsers />, label: "Users", path: "/admin/user-management" },
     { icon: <MdManageAccounts />, label: "Talent-Management", path: "/admin/talent-management" },
+    { icon: <FaClipboardList />, label: "Applications", path: "/admin/talent-applications" }, // Add this
     { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
   ];
 
   return (
     <>
-      {/* Hamburger Button for Mobile */}
       <button
         className="fixed top-4 left-4 z-50 text-white md:hidden"
         onClick={() => setIsOpen(!isOpen)}
@@ -29,7 +28,6 @@ const AdminSideBar = () => {
         {isOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
       </button>
 
-      {/* Sidebar */}
       <motion.aside
         initial="hidden"
         animate="visible"
@@ -56,7 +54,7 @@ const AdminSideBar = () => {
                   isActive ? "bg-gray-700" : "hover:bg-gray-800"
                 }`
               }
-              onClick={() => setIsOpen(false)} // Close sidebar on mobile click
+              onClick={() => setIsOpen(false)}
             >
               {({ isActive }) => (
                 <motion.div

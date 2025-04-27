@@ -20,6 +20,7 @@ import Home from "./pages/User/Home";
 import Talent from "./pages/User/Talent";
 import TalentProfile from "./pages/Talent-View/Profile";
 import TalentApplication from "./pages/User/TalentApplication";
+import TalentApplications from "./pages/Admin-View/Talent/Applications";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -54,6 +55,7 @@ function App() {
         { path: "talent-management", element: <TalentManagement /> },
         { path: "add-talent", element: <AddTalent /> },
         { path: "user-management", element: <UserManagement /> },
+        { path: "talent-applications", element: <TalentApplications /> },
       ],
     },
     {

@@ -3,32 +3,26 @@ import { Readable } from "stream";
 import cloudinary from "../../config/cloudinary.js";
 import { User } from "../../models/auth/user.model.js";
 import bcrypt from "bcryptjs";
+import { TalentApplication } from "../../models/auth/talentApplication.model.js";
 
-export const addTalent = async (req, res) => {
+export const addTalent = async (req) => {
   try {
     if (req.user.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Only admins can add talents",
-      });
+      throw new Error("Only admins can add talents");
     }
 
-    const { name, email, password, category, services, portfolio, experience, education } =
-      req.body;
+    const { name, email, password, category, services, portfolio, experience, education, profileImageUrl } = req.body;
 
     // Validate required fields
     validateFields(["name", "email", "password", "category", "services"], req.body);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "A user with this email already exists",
-      });
+      throw new Error("A user with this email already exists");
     }
 
-    let profileImageUrl = null;
-    if (req.file) {
+    let finalProfileImageUrl = profileImageUrl || null; // Use the provided URL if available (from approveTalentApplication)
+    if (req.file && !finalProfileImageUrl) { // Only upload if no URL is provided
       const stream = Readable.from(req.file.buffer);
       const uploadResult = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
@@ -43,7 +37,7 @@ export const addTalent = async (req, res) => {
         );
         stream.pipe(uploadStream);
       });
-      profileImageUrl = uploadResult.secure_url;
+      finalProfileImageUrl = uploadResult.secure_url;
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -53,12 +47,12 @@ export const addTalent = async (req, res) => {
       email,
       password: hashedPassword,
       role: "talent",
-      category, // Store category
-      services: services ? JSON.parse(services) : [], // Parse services as an array
+      category,
+      services: services ? JSON.parse(services) : [],
       portfolio,
       experience: experience ? JSON.parse(experience) : [],
       education: education ? JSON.parse(education) : [],
-      profileImage: profileImageUrl,
+      profileImage: finalProfileImageUrl,
       createdBy: req.user.id,
     });
 
@@ -94,7 +88,7 @@ export const addTalent = async (req, res) => {
       `,
     });
 
-    res.status(201).json({
+    return {
       success: true,
       message: "Talent added successfully",
       talent: {
@@ -104,15 +98,11 @@ export const addTalent = async (req, res) => {
         role: newTalent.role,
         category: newTalent.category,
         services: newTalent.services,
-        profileImage: newTalent.profileImage,
       },
-    });
+    };
   } catch (error) {
     console.error("Error adding talent:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "An error occurred while adding the talent",
-    });
+    throw error; // Throw the error to be caught by the calling function
   }
 };
 
@@ -246,6 +236,123 @@ export const deleteTalent = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "An error occurred while deleting the talent",
+    });
+  }
+};
+
+
+export const getTalentApplications = async (req, res) => {
+  try {
+    const applications = await TalentApplication.find({ status: "pending" });
+    res.status(200).json({
+      success: true,
+      message: "Talent applications retrieved successfully",
+      applications,
+    });
+  } catch (error) {
+    console.error("Error fetching talent applications:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while fetching applications",
+    });
+  }
+};
+
+export const approveTalentApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const application = await TalentApplication.findById(id);
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    // Prepare the data for addTalent
+    const password = Math.random().toString(36).slice(-8); // Generate a random password
+    req.body = {
+      name: application.name,
+      email: application.email,
+      password,
+      category: application.category,
+      services: JSON.stringify(application.services),
+      portfolio: application.portfolio,
+      experience: JSON.stringify(application.experience),
+      education: JSON.stringify(application.education),
+      profileImageUrl: application.profileImage, // Pass the existing profile image URL
+    };
+
+    // Since we're passing the profileImageUrl, we don't need to upload a new file
+    req.file = null; // Ensure no file upload is attempted
+
+    // Call addTalent
+    const result = await addTalent(req);
+
+    // Delete the application after successful talent creation
+    await TalentApplication.findByIdAndDelete(id);
+
+    // Send the response
+    res.status(201).json({
+      success: true,
+      message: "Application approved and talent added successfully",
+      talent: result.talent,
+    });
+  } catch (error) {
+    console.error("Error approving talent application:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while approving the application",
+    });
+  }
+};
+
+export const rejectTalentApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const application = await TalentApplication.findById(id);
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    await sendEmail({
+      from: process.env.SENDER_EMAIL,
+      to: application.email,
+      subject: "Update on Your SkillConnect Talent Application",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #2c3e50;">Hello, ${application.name},</h2>
+          <p style="font-size: 16px; color: #34495e;">
+            Thank you for applying to become a talent on SkillConnect. After careful review, we regret to inform you that your application has not been approved at this time.
+          </p>
+          <p style="font-size: 16px; color: #34495e;">
+            We appreciate your interest and encourage you to apply again in the future.
+          </p>
+          <p style="font-size: 14px; color: #7f8c8d; margin-top: 20px;">
+            Need help? Contact us at <a href="mailto:support@skillconnect.com" style="color: #3498db;">support@skillconnect.com</a>.
+          </p>
+          <p style="font-size: 14px; color: #7f8c8d;">
+            Best regards,<br />
+            The SkillConnect Team
+          </p>
+        </div>
+      `,
+    });
+
+    await TalentApplication.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Application rejected successfully",
+    });
+  } catch (error) {
+    console.error("Error rejecting talent application:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while rejecting the application",
     });
   }
 };
