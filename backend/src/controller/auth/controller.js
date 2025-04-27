@@ -3,7 +3,8 @@ import { User } from "../../models/auth/user.model.js";
 import bcrypt from "bcryptjs";
 import ms from "ms";
 import transporter from "../../config/nodemailer.js";
-
+import { TalentApplication } from "../../models/auth/talentApplication.model.js";
+import { Readable } from "stream";
 //Create JWT
 export const createToken = (user) => {
   const { _id, role, email, name } = user;
@@ -219,6 +220,75 @@ export const logoutUser = (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "An error occurred during logout.",
+    });
+  }
+};
+
+export const applyTalent = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      category,
+      services,
+      portfolio,
+      experience,
+      education,
+    } = req.body;
+
+    validateFields(["name", "email", "category", "services"], req.body);
+
+    const existingApplication = await TalentApplication.findOne({ email });
+
+    if (existingApplication) {
+      return res.status(400).json({
+        success: false,
+        message: "An application with this email already exists",
+      });
+    }
+
+    let profileImageUrl = null;
+    if (req.file) {
+      const stream = Readable.from(req.file.buffer);
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "skillconnect/talent-applications",
+            allowed_formats: ["jpg", "png", "jpeg"],
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        stream.pipe(uploadStream);
+      });
+      profileImageUrl = uploadResult.secure_url;
+    }
+
+    const newApplication = new TalentApplication({
+      name,
+      email,
+      category,
+      services: services ? JSON.parse(services) : [],
+      portfolio,
+      experience: experience ? JSON.parse(experience) : [],
+      education: education ? JSON.parse(education) : [],
+      profileImage: profileImageUrl,
+    });
+
+    await newApplication.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Talent application submitted successfully",
+    });
+  } catch (error) {
+    console.error("Error submitting talent application:", error);
+    res.status(500).json({
+      success: false,
+      message:
+        error.message || "An error occurred while submitting the application",
     });
   }
 };

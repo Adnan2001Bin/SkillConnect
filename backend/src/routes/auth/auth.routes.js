@@ -1,8 +1,8 @@
 import express from "express";
-import { isAuthenticated, loginUser, logoutUser, registerUser } from "../../controller/auth/controller.js";
+import { applyTalent, isAuthenticated, loginUser, logoutUser, registerUser } from "../../controller/auth/controller.js";
 import { User } from "../../models/auth/user.model.js";
 import { restrictToAdmin, verifyToken } from "../../config/middleware.js";
-
+import upload from "../../config/multer.js"
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/is-auth", isAuthenticated);
 router.post("/logout", logoutUser);
-
+router.post("/apply-talent", upload.single("profileImage"), applyTalent);
 // backend/routes/auth/auth.routes.js
 router.get("/users", verifyToken, restrictToAdmin, async (req, res) => {
   try {
