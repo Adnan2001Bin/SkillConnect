@@ -1,4 +1,3 @@
-// src/store/authStore.js
 import { create } from "zustand";
 import axios from "axios";
 
@@ -116,6 +115,12 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  setError: (error) => set({ error }), 
+  updateUser: async (updatedUser) => {
+    set((state) => ({
+      user: { ...state.user, ...updatedUser },
+    }));
+  },
+
+  setError: (error) => set({ error }),
   clearError: () => set({ error: null }),
 }));

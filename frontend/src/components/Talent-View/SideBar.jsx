@@ -1,7 +1,6 @@
-// src/components/Talent-View/SideBar.jsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink } from "react-router"; // Use NavLink instead of Link
+import { NavLink } from "react-router";
 import {
   FaHome,
   FaUser,
@@ -12,42 +11,12 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import logo from "../../assets/logo.png";
+import { sidebarVariants, navItemVariants } from "@/utils/Talent/animationVariants";
 
 const TalentSideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Animation variants for the sidebar
-  const sidebarVariants = {
-    expanded: { width: "16rem" },
-    collapsed: { width: "5.8rem" },
-  };
-
-  // Animation variants for the links
-  const linkVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: { delay: i * 0.1, duration: 0.3, ease: "easeOut" },
-    }),
-    hover: {
-      scale: 1.01,
-      backgroundColor: "rgba(196, 222, 218, 0.2)", // Very light teal with opacity
-      boxShadow: "0 0 15px rgba(77, 165, 155, 0.5)", // Teal glow
-      color: "#4da59b", // Teal for text/icon
-      textShadow: "0 0 10px rgba(77, 165, 155, 0.8)",
-      transition: { duration: 0.3 },
-    },
-    active: {
-      scale: 1.01,
-      backgroundColor: "rgba(196, 222, 218, 0.2)", // Same as hover
-      boxShadow: "0 0 15px rgba(77, 165, 155, 0.5)", // Same as hover
-      color: "#4da59b", // Same as hover
-      textShadow: "0 0 10px rgba(77, 165, 155, 0.8)", // Same as hover
-      transition: { duration: 0.3 },
-    },
-  };
-
+  // Updated navItems to match your design
   const navItems = [
     { name: "Dashboard", icon: <FaHome />, path: "/talent/dashboard" },
     { name: "Profile", icon: <FaUser />, path: "/talent/profile" },
@@ -65,10 +34,10 @@ const TalentSideBar = () => {
       variants={sidebarVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <div className="flex flex-col h-full p-4 ">
+      <div className="flex flex-col h-full p-4">
         {/* Toggle Button */}
         <motion.button
-          className="self-end text-off-white hover:text-teal mb-4 mt-5 "
+          className="self-end text-off-white hover:text-teal mb-4 mt-5"
           style={{ color: "#f1f2f2", "--hover-color": "#4da59b" }}
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.9 }}
@@ -95,21 +64,21 @@ const TalentSideBar = () => {
             <motion.div
               key={item.name}
               custom={index}
-              variants={linkVariants}
+              variants={navItemVariants}
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className="mb-4 px-3 py-2 rounded-lg "
+              className="mb-4 px-3 py-2 rounded-lg"
             >
               <NavLink
                 to={item.path}
-                className="flex items-center text-off-white relative group "
+                className="flex items-center text-off-white relative group"
                 style={{ color: "#f1f2f2" }}
               >
                 {({ isActive }) => (
                   <motion.div
                     animate={isActive ? "active" : "visible"}
-                    variants={linkVariants}
+                    variants={navItemVariants}
                     className="flex items-center w-full h-[2rem] px-2 rounded-xl"
                   >
                     <span className="text-xl mr-3">{item.icon}</span>

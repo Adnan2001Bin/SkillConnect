@@ -1,11 +1,10 @@
-// src/components/Talent-View/Header.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuthStore } from "@/store/authStore";
 import Loader from "../Loader/Loader";
-import { buttonVariants } from "@/utils/Admin/animationVariants";
+import { headerVariants, buttonVariants } from "@/utils/Talent/animationVariants";
 
 const TalentHeader = () => {
   const navigate = useNavigate();
@@ -25,17 +24,7 @@ const TalentHeader = () => {
   }
 
   // Extract the first two letters of the user's email
-  const emailInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "NA"; 
-
-  // Animation variants for the header
-  const headerVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
+  const emailInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "NA";
 
   return (
     <motion.header

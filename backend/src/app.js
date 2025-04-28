@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth/auth.routes.js"
 import adminRouter from "./routes/admin/routes.js"
+import talentRoutes from "./routes/talent/routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(cookieParser())
 
 app.use("/api/auth" , authRouter)
 app.use("/api/admin" , adminRouter)
+app.use("/api/talent", talentRoutes);
 
 
 

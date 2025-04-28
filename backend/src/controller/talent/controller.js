@@ -1,0 +1,85 @@
+import { Readable } from "stream";
+import cloudinary from "../../config/cloudinary.js";
+import { User } from "../../models/auth/user.model.js";
+
+export const updateProfile = async (req, res) => {
+    try {
+      const userId = req.user.id; // From verifyToken middleware
+      const { name, category, services, portfolio, experience, education } = req.body;
+  
+      // Validate required fields
+      if (!name || !category || !services) {
+        return res.status(400).json({
+          success: false,
+          message: "Name, category, and services are required",
+        });
+      }
+  
+      let profileImageUrl = null;
+      if (req.file) {
+        const stream = Readable.from(req.file.buffer);
+        const uploadResult = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: "skillconnect/talents",
+              allowed_formats: ["jpg", "png", "jpeg"],
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          stream.pipe(uploadStream);
+        });
+        profileImageUrl = uploadResult.secure_url;
+      }
+  
+      const updatedData = {
+        name,
+        category,
+        services: services ? JSON.parse(services) : [],
+        portfolio,
+        experience: experience ? JSON.parse(experience) : [],
+        education: education ? JSON.parse(education) : [],
+      };
+  
+      if (profileImageUrl) {
+        updatedData.profileImage = profileImageUrl;
+      }
+  
+      const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+        new: true,
+        runValidators: true,
+      });
+  
+      if (!updatedUser) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Profile updated successfully",
+        user: {
+          id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          category: updatedUser.category,
+          services: updatedUser.services,
+          portfolio: updatedUser.portfolio,
+          experience: updatedUser.experience,
+          education: updatedUser.education,
+          profileImage: updatedUser.profileImage,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating talent profile:", error);
+      res.status(500).json({
+        success: false,
+        message: error.message || "An error occurred while updating the profile",
+      });
+    }
+  };
