@@ -1,4 +1,3 @@
-// src/pages/AddTalent.jsx
 import Loader from "@/components/Loader/Loader";
 import { useAuthStore } from "@/store/authStore";
 import React, { useRef, useState } from "react";
@@ -44,15 +43,13 @@ const AddTalent = () => {
     }
   };
 
-  const handleServicesChange = (e) => {
-    const options = e.target.options;
-    const selectedServices = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedServices.push(options[i].value);
-      }
-    }
-    setFormData((prev) => ({ ...prev, services: selectedServices }));
+  const handleServiceToggle = (serviceTitle) => {
+    setFormData((prev) => {
+      const updatedServices = prev.services.includes(serviceTitle)
+        ? prev.services.filter((service) => service !== serviceTitle)
+        : [...prev.services, serviceTitle];
+      return { ...prev, services: updatedServices };
+    });
   };
 
   const handleFileChange = (e) => {
@@ -130,7 +127,7 @@ const AddTalent = () => {
     return params.get("category");
   };
 
-  const filteredServices = allServices.filter( // Changed to allServices
+  const filteredServices = allServices.filter(
     (service) => getCategoryFromPath(service.path) === formData.category
   );
 
@@ -272,29 +269,38 @@ const AddTalent = () => {
             <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
               Services
             </label>
-            <select
-              multiple
-              name="services"
-              value={formData.services}
-              onChange={handleServicesChange}
-              required
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base max-h-40 overflow-y-auto"
-              disabled={!formData.category}
+            <div
+              className="max-h-40 overflow-y-auto border border-gray-700 rounded-lg p-4 bg-gray-800"
+              style={{ borderColor: "#4b5563" }}
             >
               {filteredServices.length > 0 ? (
                 filteredServices.map((service) => (
-                  <option key={service.id} value={service.title}>
-                    {service.title}
-                  </option>
+                  <div key={service.id} className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id={`service-${service.id}`}
+                      value={service.title}
+                      checked={formData.services.includes(service.title)}
+                      onChange={() => handleServiceToggle(service.title)}
+                      className="mr-2 h-4 w-4 text-indigo-500 focus:ring-indigo-500 border-gray-600 rounded"
+                      style={{ accentColor: "#6366f1", borderColor: "#4b5563" }}
+                    />
+                    <label
+                      htmlFor={`service-${service.id}`}
+                      className="text-sm text-white"
+                    >
+                      {service.title}
+                    </label>
+                  </div>
                 ))
               ) : (
-                <option value="" disabled>
-                  Select a category first
-                </option>
+                <p className="text-sm text-gray-500">
+                  Select a category first to view services.
+                </p>
               )}
-            </select>
+            </div>
             <p className="text-xs sm:text-sm text-gray-500 mt-2">
-              Hold Ctrl (Windows) or Cmd (Mac) to select multiple services
+              Select the services offered by the talent.
             </p>
           </motion.div>
 
@@ -433,7 +439,7 @@ const AddTalent = () => {
               onClick={() => addArrayItem("education")}
               className="text-indigo-400 hover:text-indigo-300 text-sm sm:text-base"
             >
-              + Add Educationc
+              + Add Education
             </button>
           </motion.div>
 

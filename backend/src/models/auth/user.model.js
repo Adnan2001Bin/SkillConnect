@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
         "business",
         "writing",
         "consulting",
-      ], // Match categories from config/index.js
+      ],
     },
     services: [
       {
@@ -72,8 +72,41 @@ const userSchema = new mongoose.Schema(
     ],
     profileImage: {
       type: String,
-      default: null, // Store Cloudinary URL
+      default: null,
     },
+    projects: [
+      {
+        title: {
+          type: String,
+          required: [true, "Project title is required"],
+          trim: true,
+        },
+        description: {
+          type: String,
+          required: [true, "Project description is required"],
+          trim: true,
+        },
+        images: [
+          {
+            type: String,
+          },
+        ],
+        projectLink: {
+          type: String,
+          trim: true,
+        },
+        technologies: [
+          {
+            type: String,
+            trim: true,
+          },
+        ],
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

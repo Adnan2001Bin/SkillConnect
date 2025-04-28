@@ -22,6 +22,7 @@ import Talent from "./pages/User/Talent";
 import TalentApplication from "./pages/User/TalentApplication";
 import TalentApplications from "./pages/Admin-View/Talent/Applications";
 import TalentProfile from "./pages/Talent-View/TalentProfile";
+import TalentProjects from "./pages/Talent-View/Projects";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -69,6 +70,7 @@ function App() {
       children: [{ path: "dashboard", element: <TalentDashboard /> },
 
         { path: "profile", element: <TalentProfile /> },
+        { path: "projects", element: <TalentProjects /> },
       ],
     },
     {
