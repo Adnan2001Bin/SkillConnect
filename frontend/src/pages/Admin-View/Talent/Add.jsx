@@ -122,13 +122,8 @@ const AddTalent = () => {
     }
   };
 
-  const getCategoryFromPath = (path) => {
-    const params = new URLSearchParams(path.split("?")[1]);
-    return params.get("category");
-  };
-
   const filteredServices = allServices.filter(
-    (service) => getCategoryFromPath(service.path) === formData.category
+    (service) => service.category === formData.category
   );
 
   if (isLoading) {
@@ -258,7 +253,7 @@ const AddTalent = () => {
                 Select a category
               </option>
               {categories.map((cat) => (
-                <option key={cat.id} value={getCategoryFromPath(cat.path)}>
+                <option key={cat.id} value={cat.title}>
                   {cat.title}
                 </option>
               ))}

@@ -19,14 +19,14 @@ const talentApplicationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Category is required"],
       enum: [
-        "programming",
-        "graphics",
-        "marketing",
-        "video",
-        "ai",
-        "business",
-        "writing",
-        "consulting",
+        "Programming & Tech",
+        "Graphics & Design",
+        "Digital Marketing",
+        "Video & Animation",
+        "AI Services",
+        "Business",
+        "Writing & Translation",
+        "Consulting",
       ],
     },
     services: [
@@ -77,4 +77,4 @@ const talentApplicationSchema = new mongoose.Schema(
   }
 );
 
-export const TalentApplication = mongoose.model('TalentApplication' , talentApplicationSchema);
+export const TalentApplication = mongoose.model('TalentApplication', talentApplicationSchema);

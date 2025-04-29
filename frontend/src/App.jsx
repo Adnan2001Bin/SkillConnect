@@ -17,12 +17,14 @@ import { useAuthStore } from "./store/authStore";
 import ProtectedRoute from "./components/CheckAuth";
 import Loader from "./components/Loader/Loader";
 import Home from "./pages/User/Home";
-import Talent from "./pages/User/Talent";
+
 
 import TalentApplication from "./pages/User/TalentApplication";
 import TalentApplications from "./pages/Admin-View/Talent/Applications";
 import TalentProfile from "./pages/Talent-View/TalentProfile";
 import TalentProjects from "./pages/Talent-View/Projects";
+import TalentList from "./pages/User/Talent";
+import TalentDetails from "./pages/User/TalentDetails";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -81,9 +83,10 @@ function App() {
           path: "/", element: <Home />,
          }, 
          {
-          path: "talentlist", element: <Talent />
+          path: "talentlist", element: <TalentList />
          },
          { path: "apply-talent", element: <TalentApplication /> },
+         { path: "talentlist/:id", element: <TalentDetails /> },
       ],
     },
   ]);
