@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router"; // Add useLocation
 import Loader from "@/components/Loader/Loader";
+import { categories, allServices } from "@/config";
 
 // Animation variants
 const containerVariants = {
@@ -31,9 +32,31 @@ const cardVariants = {
 
 const TalentList = () => {
   const [talents, setTalents] = useState([]);
+  const [filteredTalents, setFilteredTalents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Filter states
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedServices, setSelectedServices] = useState([]);
+
+  // Get query parameters from URL
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const categoryParam = params.get("category");
+    const serviceParam = params.get("service");
+
+    // Set initial filter states based on query parameters
+    if (categoryParam) {
+      setSelectedCategory(decodeURIComponent(categoryParam));
+    }
+    if (serviceParam) {
+      setSelectedServices([decodeURIComponent(serviceParam)]);
+    }
+  }, [location.search]);
+
+  // Fetch talents on component mount
   useEffect(() => {
     const fetchTalents = async () => {
       setIsLoading(true);
@@ -51,6 +74,7 @@ const TalentList = () => {
           throw new Error(data.message || "Failed to fetch talents");
         }
         setTalents(data.talents);
+        setFilteredTalents(data.talents); // Initially, show all talents
       } catch (err) {
         setError(err.message);
       } finally {
@@ -60,6 +84,54 @@ const TalentList = () => {
 
     fetchTalents();
   }, []);
+
+  // Filter talents whenever selectedCategory, selectedServices, or talents change
+  useEffect(() => {
+    let filtered = talents;
+
+    // Filter by category
+    if (selectedCategory) {
+      filtered = filtered.filter(
+        (talent) => talent.category === selectedCategory
+      );
+    }
+
+    // Filter by services (talent must offer at least one of the selected services)
+    if (selectedServices.length > 0) {
+      filtered = filtered.filter((talent) =>
+        selectedServices.some((service) => talent.services.includes(service))
+      );
+    }
+
+    setFilteredTalents(filtered);
+  }, [selectedCategory, selectedServices, talents]);
+
+  // Handle category selection
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setSelectedServices([]); // Reset services when category changes
+  };
+
+  // Handle service selection
+  const handleServiceToggle = (serviceTitle) => {
+    setSelectedServices((prev) =>
+      prev.includes(serviceTitle)
+        ? prev.filter((service) => service !== serviceTitle)
+        : [...prev, serviceTitle]
+    );
+  };
+
+  // Get services for the selected category
+  const filteredServices = allServices.filter(
+    (service) => service.category === selectedCategory
+  );
+
+  // Reset filters
+  const resetFilters = () => {
+    setSelectedCategory("");
+    setSelectedServices([]);
+    setFilteredTalents(talents);
+  };
 
   if (isLoading) {
     return <Loader text="Loading talents..." />;
@@ -77,6 +149,79 @@ const TalentList = () => {
           Discover Our Talents
         </motion.h2>
 
+        {/* Filter Section */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-6">
+            {/* Category Filter */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
+              <select
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.title}>
+                    {cat.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Services Filter */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Services
+              </label>
+              <div className="max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-4 bg-gray-50">
+                {selectedCategory ? (
+                  filteredServices.length > 0 ? (
+                    filteredServices.map((service) => (
+                      <div key={service.id} className="flex items-center mb-2">
+                        <input
+                          type="checkbox"
+                          id={`service-filter-${service.id}`}
+                          value={service.title}
+                          checked={selectedServices.includes(service.title)}
+                          onChange={() => handleServiceToggle(service.title)}
+                          className="mr-2 h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor={`service-filter-${service.id}`}
+                          className="text-sm text-gray-900"
+                        >
+                          {service.title}
+                        </label>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No services available for this category.
+                    </p>
+                  )
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    Select a category to view services.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Reset Filters Button */}
+            <div>
+              <button
+                onClick={resetFilters}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 text-sm sm:text-base"
+              >
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
         {error && (
           <div className="text-center text-red-500 mb-6">{error}</div>
         )}
@@ -87,8 +232,8 @@ const TalentList = () => {
           initial="hidden"
           animate="visible"
         >
-          {talents.length > 0 ? (
-            talents.map((talent) => (
+          {filteredTalents.length > 0 ? (
+            filteredTalents.map((talent) => (
               <Link
                 key={talent._id}
                 to={`/talentlist/${talent._id}`}
@@ -155,7 +300,7 @@ const TalentList = () => {
             ))
           ) : (
             <p className="text-center text-gray-600 col-span-full">
-              No talents available at the moment.
+              No talents match your filter criteria.
             </p>
           )}
         </motion.div>

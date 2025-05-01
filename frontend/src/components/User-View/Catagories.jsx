@@ -49,7 +49,7 @@ const Categories = () => {
           {categories.map((category) => (
             <Link
               key={category.id}
-              to={category.path}
+              to={`/talentlist?category=${encodeURIComponent(category.title)}`} // Construct URL with category query param
               className="focus:outline-none"
             >
               <motion.div

@@ -1,7 +1,6 @@
-// src/components/User-View/PopularServices.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router"; // Ensured correct import
+import { Link } from "react-router";
 import { popularServices } from "@/config";
 
 const PopularServices = () => {
@@ -50,7 +49,7 @@ const PopularServices = () => {
           {popularServices.map((service) => (
             <Link
               key={service.id}
-              to={service.path}
+              to={`/talentlist?service=${encodeURIComponent(service.title)}`} // Construct URL with service query param
               className="focus:outline-none"
             >
               <motion.div
@@ -65,7 +64,7 @@ const PopularServices = () => {
                   </h3>
                 </div>
                 {/* Body */}
-                <div className="flex items-center justify-center rounded-lg h-[70%] ">
+                <div className="flex items-center justify-center rounded-lg h-[70%]">
                   <img
                     src={service.icon}
                     alt={`${service.title} icon`}
