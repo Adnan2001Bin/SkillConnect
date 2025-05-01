@@ -25,6 +25,8 @@ import TalentProfile from "./pages/Talent-View/TalentProfile";
 import TalentProjects from "./pages/Talent-View/Projects";
 import TalentList from "./pages/User/Talent";
 import TalentDetails from "./pages/User/TalentDetails";
+import TalentMessages from "./pages/Talent-View/TalentMessages";
+import UserMessages from "./pages/User/UserMessages";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -73,6 +75,7 @@ function App() {
 
         { path: "profile", element: <TalentProfile /> },
         { path: "projects", element: <TalentProjects /> },
+        { path: "messages", element: <TalentMessages /> }
       ],
     },
     {
@@ -87,6 +90,7 @@ function App() {
          },
          { path: "apply-talent", element: <TalentApplication /> },
          { path: "talentlist/:id", element: <TalentDetails /> },
+         { path: "my-profile", element: <UserMessages /> },
       ],
     },
   ]);

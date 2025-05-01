@@ -1,3 +1,4 @@
+// src/components/User-View/NavItems.jsx
 import React from "react";
 import { NavLink } from "react-router";
 import { motion } from "framer-motion";
@@ -5,7 +6,8 @@ import { motion } from "framer-motion";
 const userViewNavItems = [
   { id: "home", label: "Home", path: "/" },
   { id: "talentlist", label: "Talent List", path: "/talentlist" },
-  { id: "apply-talent", label: "Apply as Talent", path: "/apply-talent" }, // Add this
+  { id: "apply-talent", label: "Apply as Talent", path: "/apply-talent" },
+  { id: "messages", label: "Messages", path: "/my-profile" }, // Add this
   { id: "about", label: "About", path: "/about" },
   { id: "contact", label: "Contact", path: "/contact" },
 ];

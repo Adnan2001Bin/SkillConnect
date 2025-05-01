@@ -5,7 +5,7 @@ import authRouter from "./routes/auth/auth.routes.js"
 import adminRouter from "./routes/admin/routes.js"
 import talentRoutes from "./routes/talent/routes.js";
 import publicRoutes from "./routes/public/routes.js";
-
+import chatRouter from "./routes/chat.routes.js";
 
 const app = express();
 
@@ -37,6 +37,7 @@ app.use("/api/auth" , authRouter)
 app.use("/api/admin" , adminRouter)
 app.use("/api/talent", talentRoutes);
 app.use("/api/public", publicRoutes);
+app.use("/api/chat", chatRouter);
 
 
 

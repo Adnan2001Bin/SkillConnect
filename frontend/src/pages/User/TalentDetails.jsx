@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
+import { useAuthStore } from "@/store/authStore";
 import Loader from "@/components/Loader/Loader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Animation variants
 const containerVariants = {
@@ -25,8 +28,11 @@ const childVariants = {
 
 const TalentDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuthStore();
   const [talent, setTalent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isStartingChat, setIsStartingChat] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -56,7 +62,54 @@ const TalentDetails = () => {
     fetchTalent();
   }, [id]);
 
-  if (isLoading) {
+  const handleStartChat = async () => {
+    if (!isAuthenticated) {
+      toast.info("Please log in to start a chat.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate("/auth/login");
+      return;
+    }
+
+    if (user.role === "talent") {
+      toast.error("Talents cannot start chats with other talents.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    setIsStartingChat(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/chat/start`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ talentId: talent._id }),
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message);
+
+      toast.success("Chat started successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      navigate(`/my-profile?chatId=${data.chatId}`); // Redirect to user profile with chatId
+    } catch (error) {
+      toast.error(error.message || "Failed to start chat", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
+
+  if (authLoading || isLoading) {
     return <Loader text="Loading talent details..." />;
   }
 
@@ -118,16 +171,25 @@ const TalentDetails = () => {
               <p className="text-lg text-gray-600 text-center mt-1">
                 {talent.category}
               </p>
-              {talent.portfolio && (
-                <a
-                  href={talent.portfolio}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-block px-6 py-2 bg-green-500 text-white rounded-full text-sm font-semibold hover:bg-green-600 transition-colors duration-200"
+              <div className="mt-4 flex flex-col items-center gap-3">
+                {talent.portfolio && (
+                  <a
+                    href={talent.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-6 py-2 bg-green-500 text-white rounded-full text-sm font-semibold hover:bg-green-600 transition-colors duration-200"
+                  >
+                    View Portfolio
+                  </a>
+                )}
+                <button
+                  onClick={handleStartChat}
+                  disabled={isStartingChat}
+                  className="inline-block px-6 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  View Portfolio
-                </a>
-              )}
+                  {isStartingChat ? "Starting Chat..." : "Start Chat"}
+                </button>
+              </div>
             </div>
           </motion.div>
 
