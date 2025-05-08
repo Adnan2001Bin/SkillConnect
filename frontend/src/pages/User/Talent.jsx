@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router"; // Add useLocation
+import { Link, useLocation } from "react-router";
 import Loader from "@/components/Loader/Loader";
 import { categories, allServices } from "@/config";
+import { useAuthStore } from "@/store/authStore"; // Import useAuthStore
 
 // Animation variants
 const containerVariants = {
@@ -31,6 +32,7 @@ const cardVariants = {
 };
 
 const TalentList = () => {
+  const { user, isLoading: authLoading } = useAuthStore(); // Get user and auth loading state
   const [talents, setTalents] = useState([]);
   const [filteredTalents, setFilteredTalents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +135,7 @@ const TalentList = () => {
     setFilteredTalents(talents);
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return <Loader text="Loading talents..." />;
   }
 
@@ -236,7 +238,14 @@ const TalentList = () => {
             filteredTalents.map((talent) => (
               <Link
                 key={talent._id}
-                to={`/talentlist/${talent._id}`}
+                to={
+                  user
+                    ? `/talentlist/${talent._id}`
+                    : {
+                        pathname: "/auth/login",
+                        state: { from: `/talentlist/${talent._id}` },
+                      }
+                }
                 className="focus:outline-none"
               >
                 <motion.div

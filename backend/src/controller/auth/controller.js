@@ -225,6 +225,84 @@ export const logoutUser = (req, res) => {
   }
 };
 
+
+export const sendResetOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    validateFields(["email"], req.body);
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    // Generate OTP
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.resetOtp = otp;
+    user.resetOtpExpireAt = Date.now() + ms("15m");
+    await user.save();
+
+    // Send Reset OTP Email
+    await sendEmail({
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Password Reset OTP",
+      text: `Your OTP for resetting your password is ${otp}. Use this OTP within 15 minutes.`,
+    });
+
+    res.json({ success: true, message: "Reset OTP sent to your email." });
+  } catch (error) {
+    console.error("Error during reset OTP generation:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while sending reset OTP.",
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    validateFields(["email", "otp", "newPassword"], req.body);
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    if (!user.resetOtp || user.resetOtp !== otp) {
+      return res.status(400).json({ success: false, message: "Invalid OTP." });
+    }
+
+    if (user.resetOtpExpireAt < Date.now()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "OTP has expired." });
+    }
+
+    // Hash new password
+    user.password = await bcrypt.hash(newPassword, 12);
+    user.resetOtp = null;
+    user.resetOtpExpireAt = null;
+    await user.save();
+
+    res.json({ success: true, message: "Password reset successfully." });
+  } catch (error) {
+    console.error("Error during password reset:", error);
+    res.status(500).json({
+      success: false,
+      message:
+        error.message || "An error occurred while resetting the password.",
+    });
+  }
+};
+
 export const applyTalent = async (req, res) => {
   try {
     const {

@@ -1,5 +1,5 @@
 import express from "express";
-import { applyTalent, isAuthenticated, loginUser, logoutUser, registerUser } from "../../controller/auth/controller.js";
+import { applyTalent, isAuthenticated, loginUser, logoutUser, registerUser, resetPassword, sendResetOtp } from "../../controller/auth/controller.js";
 import { User } from "../../models/auth/user.model.js";
 import { restrictToAdmin, verifyToken } from "../../config/middleware.js";
 import upload from "../../config/multer.js"
@@ -32,5 +32,8 @@ router.delete("/users/:id", verifyToken, restrictToAdmin, async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+router.post("/send-reset-otp", sendResetOtp);
+router.post("/reset-password", resetPassword);
 
 export default router;

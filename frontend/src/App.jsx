@@ -27,6 +27,7 @@ import TalentList from "./pages/User/Talent";
 import TalentDetails from "./pages/User/TalentDetails";
 import TalentMessages from "./pages/Talent-View/TalentMessages";
 import UserMessages from "./pages/User/UserMessages";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 
 function App() {
   const { user, isLoading, checkAuth, isAuthenticated } = useAuthStore();
@@ -47,6 +48,7 @@ function App() {
       children: [
         { path: "register", element: <Register /> },
         { path: "login", element: <Login /> },
+        { path: "forgot-password", element: <ForgotPassword /> },
       ],
     },
     {

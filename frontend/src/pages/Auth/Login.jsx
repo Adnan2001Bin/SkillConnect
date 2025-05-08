@@ -1,7 +1,6 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router"; // Add Link for navigation
 import AuthForm from "@/components/Auth/AuthForm";
 import InputField from "@/components/Auth/InputField";
 import logo from "../../assets/logo.png";
@@ -30,7 +29,7 @@ const Login = () => {
       } else if (role === "talent") {
         navigate("/talent/dashboard");
       } else {
-        navigate("/"); 
+        navigate("/");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -63,12 +62,12 @@ const Login = () => {
           <div className="text-center">
             <p className="text-sm text-gray-500">
               Don't have an account?{" "}
-              <a
-                href="/auth/register"
+              <Link
+                to="/auth/register"
                 className="font-medium text-white hover:text-gray-300 transition-colors duration-200"
               >
                 Sign up
-              </a>
+              </Link>
             </p>
             <div className="mt-6 text-sm text-gray-500">
               © {new Date().getFullYear()} SkillConnect. All rights reserved.
@@ -112,6 +111,15 @@ const Login = () => {
           onChange={handleChange}
           placeholder="••••••••"
         />
+        {/* Forgot Password Link */}
+        <div className="text-right mt-2">
+          <Link
+            to="/auth/forgot-password"
+            className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
+          >
+            Forgot Password?
+          </Link>
+        </div>
       </AuthForm>
     </div>
   );

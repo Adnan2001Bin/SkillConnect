@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [8, "Password must be at least 8 characters long"],
     },
+    resetOtp: {
+    type: String,
+    default: '',
+  },
+  resetOtpExpireAt: {
+    type: Number,
+    default: 0,
+  },
     role: {
       type: String,
       enum: ["admin", "talent", "user"],
